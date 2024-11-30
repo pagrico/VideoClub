@@ -1,35 +1,18 @@
 <?php
-include_once "Soporte.php";
 class Dvd extends Soporte {
-    public $idioma;
+    protected $idioma;
     private $formatPantalla;
 
-    public function __construct($titulo, $numero, $precio, $idioma, $formatPantalla) {
+    public function __construct(string $titulo, int $numero, float $precio, string $idioma, string $formatPantalla) {
         parent::__construct($titulo, $numero, $precio);
         $this->idioma = $idioma;
         $this->formatPantalla = $formatPantalla;
     }
 
-    public function getIdioma() {
-        return $this->idioma;
-    }
-
-    public function setIdioma($idioma) {
-        $this->idioma = $idioma;
-    }
-
-    public function getFormatPantalla() {
-        return $this->formatPantalla;
-    }
-
-    public function setFormatPantalla($formatPantalla) {
-        $this->formatPantalla = $formatPantalla;
-    }
-    
-    public function muestraResumen() {
-        echo parent::muestraResumen()."<br>idioma: $this->idioma, <br>formatPantalla: $this->formatPantalla";
-        
+    // Sobreescribir el método muestraResumen si se desea una implementación diferente
+    public function muestraResumen(): void {
+        parent::muestraResumen(); // Llamar al método de la clase base
+        echo "Idioma: $this->idioma, <br>Formato Pantalla: $this->formatPantalla<br>";
     }
 }
-
 ?>
