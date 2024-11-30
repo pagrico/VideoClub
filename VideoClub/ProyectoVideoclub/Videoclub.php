@@ -1,11 +1,12 @@
 <?php
-include_once "CintaVideo.php" ;
+include_once "Cliente.php"; // Asegúrate de incluir la clase Cliente
+
 class Videoclub {
     private $nombre;
     private $productos = []; // Array de soportes
     private $numProductos = 0;
-    private $socios = []; // Array de clientes
-    private $numSocios = 0;
+    private $clientes = []; // Array de clientes (ahora objetos de Cliente)
+    private $numClientes = 0;
 
     // Constructor
     public function __construct($nombre) {
@@ -56,15 +57,11 @@ class Videoclub {
         return $this->incluirProducto($juego);
     }
 
-    // Método para incluir un socio
+    // Método para incluir un cliente
     public function incluirSocio($nombre, $maxAlquileresConcurrentes = 3) {
-        $socio = [
-            'nombre' => $nombre,
-            'maxAlquileresConcurrentes' => $maxAlquileresConcurrentes,
-            'alquileres' => [] // Array de productos alquilados
-        ];
-        $this->socios[] = $socio;
-        $this->numSocios++;
+        $cliente = new Cliente($nombre, $maxAlquileresConcurrentes);
+        $this->clientes[] = $cliente;
+        $this->numClientes++;
         return $this; // Retorna $this para encadenamiento
     }
 
@@ -72,26 +69,26 @@ class Videoclub {
     public function listarProductos() {
         echo "Productos disponibles en '$this->nombre':<br>";
         foreach ($this->productos as $index => $producto) {
-            echo "[$index] {$producto['titulo']} ({$producto['tipo']}) - " .
+            echo "[$index] {$producto['titulo']} ({$producto['tipo']}) - " . 
                 ($producto['alquilado'] ? 'Alquilado' : 'Disponible') . "<br>";
         }
         return $this; // Retorna $this para encadenamiento
     }
 
-    // Método para listar socios
+    // Método para listar clientes
     public function listarSocios() {
-        echo "Socios registrados en '$this->nombre':<br>";
-        foreach ($this->socios as $index => $socio) {
-            echo "[$index] {$socio['nombre']} - Alquileres: " . count($socio['alquileres']) . "<br>";
+        echo "Clientes registrados en '$this->nombre':<br>";
+        foreach ($this->clientes as $cliente) {
+            echo $cliente . "<br>"; // Usando el método __toString de Cliente
         }
         return $this; // Retorna $this para encadenamiento
     }
 
-    // Método para alquilar un producto a un socio
-    public function alquilarSocioProducto($numeroCliente, $numeroSoporte) {
-        // Verificar que el índice del socio existe
-        if (!isset($this->socios[$numeroCliente])) {
-            echo "Error: El socio con índice $numeroCliente no existe.<br>";
+    // Método para alquilar un producto a un cliente
+    public function alquilaSocioProducto($numeroCliente, $numeroSoporte) {
+        // Verificar que el índice del cliente existe
+        if (!isset($this->clientes[$numeroCliente])) {
+            echo "Error: El cliente con índice $numeroCliente no existe.<br>";
             return $this;
         }
     
@@ -101,7 +98,7 @@ class Videoclub {
             return $this;
         }
     
-        $socio = &$this->socios[$numeroCliente]; // Referencia al socio
+        $cliente = &$this->clientes[$numeroCliente]; // Referencia al cliente
         $producto = &$this->productos[$numeroSoporte]; // Referencia al producto
     
         // Verificar si el producto ya está alquilado
@@ -110,21 +107,19 @@ class Videoclub {
             return $this;
         }
     
-        // Verificar si el socio ha alcanzado el límite de alquileres concurrentes
-        if (count($socio['alquileres']) >= $socio['maxAlquileresConcurrentes']) {
-            echo "El socio '{$socio['nombre']}' ha alcanzado el límite de alquileres concurrentes.<br>";
+        // Verificar si el cliente ha alcanzado el límite de alquileres concurrentes
+        if ($cliente->getNumSoportesAlquilados() >= $cliente->getmaxAlquilerConcurrente()) {
+            echo "El cliente '{$cliente->nombre}' ha alcanzado el límite de alquileres concurrentes.<br>";
             return $this;
         }
     
         // Realizar el alquiler
         $producto['alquilado'] = true;
-        $socio['alquileres'][] = $numeroSoporte;
+        $cliente->alquilar($producto); // Usar el método alquilar del cliente para añadir el producto
     
-        echo "El socio '{$socio['nombre']}' alquiló el producto '{$producto['titulo']}'.<br>";
+        echo "El cliente '{$cliente->nombre}' alquiló el producto '{$producto['titulo']}'.<br>";
         return $this;
     }
-    
-    
     
 }
 ?>
