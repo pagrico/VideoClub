@@ -1,5 +1,5 @@
 <?php
-
+include_once "CintaVideo.php" ;
 class Videoclub {
     private $nombre;
     private $productos = []; // Array de soportes
@@ -89,33 +89,42 @@ class Videoclub {
 
     // Método para alquilar un producto a un socio
     public function alquilarSocioProducto($numeroCliente, $numeroSoporte) {
-        // Validar si el índice del socio y producto existen
-        if (!isset($this->socios[$numeroCliente]) || !isset($this->productos[$numeroSoporte])) {
-            echo "Error: socio o producto no encontrado.<br>";
-            return $this; // Retorna $this para encadenamiento
+        // Verificar que el índice del socio existe
+        if (!isset($this->socios[$numeroCliente])) {
+            echo "Error: El socio con índice $numeroCliente no existe.<br>";
+            return $this;
         }
-
-        $socio = &$this->socios[$numeroCliente];
-        $producto = &$this->productos[$numeroSoporte];
-
+    
+        // Verificar que el índice del producto existe
+        if (!isset($this->productos[$numeroSoporte])) {
+            echo "Error: El producto con índice $numeroSoporte no existe.<br>";
+            return $this;
+        }
+    
+        $socio = &$this->socios[$numeroCliente]; // Referencia al socio
+        $producto = &$this->productos[$numeroSoporte]; // Referencia al producto
+    
         // Verificar si el producto ya está alquilado
         if ($producto['alquilado']) {
             echo "El producto '{$producto['titulo']}' ya está alquilado.<br>";
             return $this;
         }
-
-        // Verificar si el socio tiene el número máximo de alquileres
+    
+        // Verificar si el socio ha alcanzado el límite de alquileres concurrentes
         if (count($socio['alquileres']) >= $socio['maxAlquileresConcurrentes']) {
             echo "El socio '{$socio['nombre']}' ha alcanzado el límite de alquileres concurrentes.<br>";
             return $this;
         }
-
+    
         // Realizar el alquiler
         $producto['alquilado'] = true;
         $socio['alquileres'][] = $numeroSoporte;
-
+    
         echo "El socio '{$socio['nombre']}' alquiló el producto '{$producto['titulo']}'.<br>";
-        return $this; // Retorna $this para encadenamiento
+        return $this;
     }
+    
+    
+    
 }
 ?>
