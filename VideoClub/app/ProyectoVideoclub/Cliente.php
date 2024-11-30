@@ -1,4 +1,5 @@
 <?php
+include_once "Soporte.php";
 class Cliente {
     public $nombre;
     private $numero;
@@ -25,10 +26,13 @@ class Cliente {
 
     // Método para alquilar un producto
     public function alquilar($soporte) {
+        
         if (!$this->tieneAlquilado($soporte) && $this->numSoportesAlquilados < $this->maxAlquilerConcurrente) {
             echo "<br>Producto añadido correctamente a la lista de alquileres del cliente $this->nombre";
             $this->soportesAlquilados[] = $soporte;
             $this->numSoportesAlquilados++;
+            $soporte->alquilado(True);
+
         } else {
             echo "<br>No se puede alquilar el producto al cliente $this->nombre.";
         }
@@ -50,11 +54,13 @@ class Cliente {
 
     // Método para devolver un soporte
     public function devolver(int $numSoporte): void {
+        
         foreach ($this->soportesAlquilados as $indice => $soporte) {
             if ($soporte->getNumero() == $numSoporte) {
                 echo "<br>Devuelto correctamente";
                 unset($this->soportesAlquilados[$indice]);
                 $this->numSoportesAlquilados--;
+                $soporte->alquilado(False);
                 return;
             }
         }

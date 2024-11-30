@@ -5,6 +5,7 @@ class Soporte implements Resumible {
     public $titulo;
     protected $numero;
     private $precio;
+    private $alquilado=false;
 
     public function __construct(string $titulo, int $numero, float $precio) {
         $this->titulo = $titulo;
@@ -14,6 +15,10 @@ class Soporte implements Resumible {
 
     public function getTitulo(): string {
         return $this->titulo;
+    }
+    public function alquilado($aux){
+        $this->alquilado=$aux;
+
     }
 
     public function getNumero(): int {

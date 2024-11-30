@@ -1,6 +1,6 @@
 <?php
     
-    include_once "Videoclub.php"; // No incluimos nada más
+    include_once "app/ProyectoVideoclub/Videoclub.php"; 
     
     $vc = new Videoclub("Severo 8A"); 
     
