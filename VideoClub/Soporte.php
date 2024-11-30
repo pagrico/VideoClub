@@ -1,41 +1,45 @@
 <?php
-    
-    class Soporte {
-    public $titulo;
-    protected $numero;
-    private $precio;
 
-    public function __construct($titulo, $numero, $precio) {
+class Soporte {
+    public $titulo;          // Propiedad pública
+    protected $numero;      // Propiedad protegida
+    private $precio;        // Propiedad privada
+
+    // Constructor con tipo de datos especificado para los parámetros
+    public function __construct(string $titulo, int $numero, float $precio) {
         $this->titulo = $titulo;
         $this->numero = $numero;
         $this->precio = $precio;
     }
 
-    public function getTitulo() {
+    // Método getter para el título
+    public function getTitulo(): string {
         return $this->titulo;
     }
 
-   
-
-    public function getNumero() {
+    // Método getter para el número
+    public function getNumero(): int {
         return $this->numero;
     }
 
-  
-    public function getPrecio() {
+    // Método getter para el precio
+    public function getPrecio(): float {
         return $this->precio;
     }
 
-    public function getprecioConIVA():float{
-        return $this->precio*1.21;
-    } 
-    public function muestraResumen(){
-        echo "<br>$this->titulo, <br>precio: $this->precio<br> Precio IVA incluido: ".$this->getprecioConIVA() ;
-
+    // Método para calcular el precio con IVA
+    public function getPrecioConIVA(): float {
+        return $this->precio * 1.21;
     }
 
-    public function __toString() {
-        return "titulo: $this->titulo, numero: $this->numero, precio: $this->precio";
+    // Método para mostrar un resumen del soporte
+    public function muestraResumen(): void {
+        echo "<br>$this->titulo, <br>Precio: $this->precio<br>Precio con IVA incluido: " . $this->getPrecioConIVA();
+    }
+
+    // Método mágico __toString para representar el objeto como una cadena
+    public function __toString(): string {
+        return "Título: $this->titulo, Número: $this->numero, Precio: $this->precio";
     }
 }
 
