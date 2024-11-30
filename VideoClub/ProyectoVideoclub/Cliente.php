@@ -28,28 +28,25 @@ class Cliente {
         return $this->numSoportesAlquilados;
     }
 
-    // Verifica si el cliente ya tiene alquilado un soporte específico
-    public function tieneAlquilado(Soporte $soporte): bool {
-        foreach ($this->soportesAlquilados as $sop) {
+    public function alquilar($soporte) {
+        if ($this->tieneAlquilado($soporte) && $this->numSoportesAlquilados < $this->maxAlquilerConcurrente) {
+            echo "<br>Producto añadido correctamente a la lista de alquileres del cliente $this->nombre";
+            $this->soporteAlquilados[] = $soporte;
+            $this->numSoportesAlquilados++;
+        } else {
+            echo "<br>No se puede alquilar el producto al cliente $this->nombre.";
+        }
+        return $this; // Retorna el objeto actual para permitir el encadenamiento
+    }
+
+    public function tieneAlquilado($soporte) {
+        foreach ($this->soporteAlquilados as $sop) {
             if ($sop === $soporte) {
-                echo "<br>El cliente ya tiene alquilado este producto";
+                echo "<br>El cliente $this->nombre ya tiene alquilado este producto.";
                 return false;
             }
         }
         return true;
-    }
-
-    // Método para alquilar un soporte, si el cliente no supera el máximo de alquileres concurrentes
-    public function alquilar(Soporte $soporte): bool {
-        if ($this->tieneAlquilado($soporte) && $this->numSoportesAlquilados < $this->maxAlquilerConcurrente) {
-            echo "<br><br>Alquilado soporte a: $this->nombre<br>Producto añadido correctamente a su lista";
-            $this->soportesAlquilados[] = $soporte;
-            $this->numSoportesAlquilados++;
-            return true;
-        } else {
-            echo "<br>No se puede alquilar ya que tiene el máximo de alquiler concurrente";
-            return false;
-        }
     }
 
     // Método para devolver un soporte

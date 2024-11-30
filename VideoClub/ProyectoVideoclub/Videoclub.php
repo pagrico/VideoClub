@@ -16,6 +16,7 @@ class Videoclub {
     private function incluirProducto($producto) {
         $this->productos[] = $producto;
         $this->numProductos++;
+        return $this; // Retorna $this para encadenamiento
     }
 
     // Métodos públicos para incluir soportes específicos
@@ -27,7 +28,7 @@ class Videoclub {
             'duracion' => $duracion,
             'alquilado' => false, // estado de alquiler
         ];
-        $this->incluirProducto($cinta);
+        return $this->incluirProducto($cinta);
     }
 
     public function incluirDvd($titulo, $precio, $idiomas, $pantalla) {
@@ -39,7 +40,7 @@ class Videoclub {
             'pantalla' => $pantalla,
             'alquilado' => false, // estado de alquiler
         ];
-        $this->incluirProducto($dvd);
+        return $this->incluirProducto($dvd);
     }
 
     public function incluirJuego($titulo, $precio, $consola, $minJugadores, $maxJugadores) {
@@ -52,7 +53,7 @@ class Videoclub {
             'maxJugadores' => $maxJugadores,
             'alquilado' => false, // estado de alquiler
         ];
-        $this->incluirProducto($juego);
+        return $this->incluirProducto($juego);
     }
 
     // Método para incluir un socio
@@ -64,20 +65,26 @@ class Videoclub {
         ];
         $this->socios[] = $socio;
         $this->numSocios++;
+        return $this; // Retorna $this para encadenamiento
     }
 
     // Método para listar productos
     public function listarProductos() {
-        foreach ($this->productos as $producto) {
-            echo $producto['titulo'] . " - " . ($producto['alquilado'] ? 'Alquilado' : 'Disponible') . "<br>";
+        echo "Productos disponibles en '$this->nombre':<br>";
+        foreach ($this->productos as $index => $producto) {
+            echo "[$index] {$producto['titulo']} ({$producto['tipo']}) - " .
+                ($producto['alquilado'] ? 'Alquilado' : 'Disponible') . "<br>";
         }
+        return $this; // Retorna $this para encadenamiento
     }
 
     // Método para listar socios
     public function listarSocios() {
-        foreach ($this->socios as $socio) {
-            echo $socio['nombre'] . " - Alquileres: " . count($socio['alquileres']) . "<br>";
+        echo "Socios registrados en '$this->nombre':<br>";
+        foreach ($this->socios as $index => $socio) {
+            echo "[$index] {$socio['nombre']} - Alquileres: " . count($socio['alquileres']) . "<br>";
         }
+        return $this; // Retorna $this para encadenamiento
     }
 
     // Método para alquilar un producto a un socio
@@ -85,7 +92,7 @@ class Videoclub {
         // Validar si el índice del socio y producto existen
         if (!isset($this->socios[$numeroCliente]) || !isset($this->productos[$numeroSoporte])) {
             echo "Error: socio o producto no encontrado.<br>";
-            return;
+            return $this; // Retorna $this para encadenamiento
         }
 
         $socio = &$this->socios[$numeroCliente];
@@ -94,19 +101,13 @@ class Videoclub {
         // Verificar si el producto ya está alquilado
         if ($producto['alquilado']) {
             echo "El producto '{$producto['titulo']}' ya está alquilado.<br>";
-            return;
+            return $this;
         }
 
         // Verificar si el socio tiene el número máximo de alquileres
         if (count($socio['alquileres']) >= $socio['maxAlquileresConcurrentes']) {
             echo "El socio '{$socio['nombre']}' ha alcanzado el límite de alquileres concurrentes.<br>";
-            return;
-        }
-
-        // Verificar si el socio ya tiene alquilado el mismo producto
-        if (in_array($numeroSoporte, $socio['alquileres'])) {
-            echo "El socio '{$socio['nombre']}' ya tiene alquilado el producto '{$producto['titulo']}'.<br>";
-            return;
+            return $this;
         }
 
         // Realizar el alquiler
@@ -114,6 +115,7 @@ class Videoclub {
         $socio['alquileres'][] = $numeroSoporte;
 
         echo "El socio '{$socio['nombre']}' alquiló el producto '{$producto['titulo']}'.<br>";
+        return $this; // Retorna $this para encadenamiento
     }
 }
-
+?>
