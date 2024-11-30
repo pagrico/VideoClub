@@ -1,0 +1,30 @@
+version: '3'
+
+# Services
+services:
+  # Apache + PHP
+  apache_php_composer:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: 'apache_php_composer-server'
+    volumes:
+      - ./.docker/apache/php.ini:/usr/local/etc/php/php.ini
+      - ./.docker/apache/httpd.conf:/etc/apache2/conf-available/httpd.conf
+      - ./VideoClub/:/var/www/html
+    expose:
+      - 80
+    ports:
+      - '80:80'
+
+# Lanzar con
+# docker-compose up -d –build
+
+# Ver los logs con
+# docker-compose logs -f
+
+# Bash: docker-compose exec apache_php_composer bash
+
+# https://www.bornfight.com/blog/blog-lamp-docker-setup-with-php-8-and-mariadb-for-symfony-projects/
+
+# https://www.cloudsavvyit.com/10528/how-to-use-docker-to-containerise-php-and-apache/
