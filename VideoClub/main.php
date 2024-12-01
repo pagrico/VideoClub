@@ -17,7 +17,8 @@
         $vc->incluirDvd("Origen", 4.5, "es,en,fr", "16:9"); 
         $vc->incluirDvd("El Imperio Contraataca", 3, "es,en","16:9"); 
         $vc->incluirCintaVideo("Los cazafantasmas", 3.5, 107); 
-        $vc->incluirCintaVideo("El nombre de la Rosa", 1.5, 140); 
+        $vc->incluirCintaVideo("El nombre de la Rosa", 1.5, 140);
+        $vc->incluirJuego("Fornite",0,"PC",1,100); 
         
         //listo los productos 
         $vc->listarProductos(); 
@@ -34,6 +35,8 @@
         //alquilo el soporte 6 al socio 1. 
         //no se puede porque el socio 1 tiene 2 alquileres como máximo 
         $vc->alquilaSocioProducto(1,6); 
+
+        $vc->alquilaSocioProducto(2,7); 
         
         //listo los socios 
         $vc->listarSocios();

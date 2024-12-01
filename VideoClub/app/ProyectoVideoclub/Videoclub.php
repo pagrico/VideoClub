@@ -40,7 +40,9 @@ public function incluirJuego($titulo, $precio, $consola, $minJugadores, $maxJuga
     return $this->incluirProducto($juego);
 }
 
-
+    function prueba(){
+        print_r ($this->clientes);
+    }
     
    
     // Método para incluir un cliente
@@ -72,12 +74,12 @@ public function incluirJuego($titulo, $precio, $consola, $minJugadores, $maxJuga
 
     // Método para alquilar un producto a un cliente
     public function alquilaSocioProducto(int $numSocio, ...$numerosProductos): void {
-        if (!isset($this->clientes[$numSocio])) {
+        if (!isset($this->clientes[$numSocio -1])) {
             echo "Error: El cliente con índice $numSocio no existe.<br>";
             return;
         }
     
-        $cliente = $this->clientes[$numSocio];
+        $cliente = $this->clientes[$numSocio -1];
     
         foreach ($numerosProductos as $numeroProducto) {
             if (!isset($this->productos[$numeroProducto])) {
