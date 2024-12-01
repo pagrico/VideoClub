@@ -82,19 +82,21 @@ public function incluirJuego($titulo, $precio, $consola, $minJugadores, $maxJuga
         foreach ($numerosProductos as $numeroProducto) {
             if (!isset($this->productos[$numeroProducto])) {
                 echo "Error: El producto con índice $numeroProducto no existe.<br>";
-                return;
+                continue; // Cambiar 'return' por 'continue'
             }
     
             $producto = $this->productos[$numeroProducto];
     
             if ($producto->getAlquilado()) {
-                echo "Error: El producto ".$producto->getTitulo(). " ya está alquilado.<br>";
-                return;
+                echo "Error: El producto " . $producto->getTitulo() . " ya está alquilado.<br>";
+                continue; // Cambiar 'return' por 'continue'
             }
+    
             $cliente->alquilar($producto);
-            echo "El cliente ". $cliente->nombre." alquiló el producto ".$producto->titulo.".<br>";
+           
         }
     }
+    
     
     
     public function devolverSocioProducto(int $numSocio, int $numeroProducto): self {

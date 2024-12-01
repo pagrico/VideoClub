@@ -13,6 +13,7 @@ class Cliente {
         $this->numero = $numero;
         $this->maxAlquilerConcurrente = $maxAlquilerConcurrente;
     }
+    
 
     // Getter para maxAlquilerConcurrente
     public function getMaxAlquilerConcurrente(): int {
@@ -45,11 +46,12 @@ class Cliente {
         foreach ($this->soportesAlquilados as $sop) {
             if ($sop->getNumero() === $soporte->getNumero()) {  // Compara por el número del soporte
                 echo "<br>El cliente $this->nombre ya tiene alquilado este producto.";
-                return false;
+                return true; // Cambiar a true para indicar que lo tiene alquilado
             }
         }
-        return true;
+        return false; // Si no se encuentra, retorna false
     }
+    
     
 
     // Método para devolver un soporte
