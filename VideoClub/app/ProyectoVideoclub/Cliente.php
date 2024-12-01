@@ -6,6 +6,8 @@ class Cliente {
     private $soportesAlquilados = [];  // Asegúrate de que este nombre sea consistente
     private $numSoportesAlquilados = 0;
     private $maxAlquilerConcurrente;
+    private $user;
+    private $password;
 
     // Constructor para inicializar el cliente con nombre, número y máximo alquiler concurrente
     public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3) {
