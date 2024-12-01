@@ -1,7 +1,7 @@
 <?php
 include_once "Resumible.php"; // Incluir la interfaz Resumible
 
-class Soporte implements Resumible {
+abstract class Soporte implements Resumible {
     public $titulo;
     protected $numero;
     private $precio;
@@ -15,6 +15,10 @@ class Soporte implements Resumible {
 
     public function getTitulo(): string {
         return $this->titulo;
+    }
+    public function getAlquilado() {
+        return $this->alquilado ;
+        
     }
     public function alquilado($aux){
         $this->alquilado=$aux;

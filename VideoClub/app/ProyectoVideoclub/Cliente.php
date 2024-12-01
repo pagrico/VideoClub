@@ -86,9 +86,9 @@ class Cliente {
         // Recorremos los soportes alquilados y los añadimos a la cadena
         foreach ($this->soportesAlquilados as $soporte) {
             // Concatenar los detalles del soporte en la variable $soportesInfo
-            $soportesInfo .= "Titulo: " . $soporte->getTitulo() . "<br> Numero: " . $soporte->getNumero() . "<br> Precio: " . $soporte->getPrecio() . "<br>";
+            $soportesInfo .= "<br>Titulo: " . $soporte->getTitulo() . "<br> Numero: " . $soporte->getNumero() . "<br> Precio: " . $soporte->getPrecio() . "<br>";
         }
-    
+        
         // Devolvemos el resultado completo concatenado
         return "Nombre: $this->nombre, Número: $this->numero, Soportes Alquilados: $soportesInfo" . 
                "Num Soportes Alquilados: $this->numSoportesAlquilados, Max Alquiler Concurrente: $this->maxAlquilerConcurrente";
