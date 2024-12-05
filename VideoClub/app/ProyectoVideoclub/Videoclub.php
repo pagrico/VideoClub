@@ -197,6 +197,26 @@ class Videoclub
         $cliente->setuser($user);
         $cliente->setpassword($password);
     }
+    public function eliminarCliente(int $id): void
+    {
+        // Recorremos el array de clientes para buscar el cliente por ID
+        foreach ($this->clientes as $key => $cliente) {
+            if ($cliente->getNumero() === $id) {
+                // Si encontramos el cliente, lo eliminamos del array
+                unset($this->clientes[$key]);
+
+                // Reindexamos el array para evitar huecos en las claves numéricas
+                $this->clientes = array_values($this->clientes);
+
+                return; // Salimos del método una vez eliminado
+            }
+        }
+
+        // Si llegamos aquí, significa que no se encontró el cliente con ese ID
+        throw new Exception("Cliente con ID $id no encontrado.");
+    }
+
+
 
 
 

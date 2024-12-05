@@ -26,6 +26,23 @@ class Cliente
     {
         $this->user = $user;
     }
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    }
+    public function setMaxAlquilerConcurrente($numeromax)
+    {
+        $this->maxAlquilerConcurrente = $numeromax;
+    }
+    public function getNumero()
+    {
+        return $this->numero;
+
+    }
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
     public function getuser()
     {
         return $this->user;

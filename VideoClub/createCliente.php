@@ -8,9 +8,6 @@ if (isset($_POST["nombre"]) && isset($_POST["usuario"]) && isset($_POST["passwor
     $vc->incluirSocio($_POST["nombre"], $_POST["numero"]);
     $vc->userPassword(count($vc->getclientes()), $_POST["usuario"], $_POST["password"]);
     header("Location: mainAdmin.php");
-
-
-
 }
 
 ?>
