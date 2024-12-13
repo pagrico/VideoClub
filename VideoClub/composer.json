@@ -1,0 +1,13 @@
+{
+    "name": "videoclub/videoclub",
+    "description": "Proyecto de videoclub con monolog",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "^3.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app"
+        }
+    }
+}

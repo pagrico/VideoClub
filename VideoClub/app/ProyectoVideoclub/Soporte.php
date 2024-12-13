@@ -1,5 +1,6 @@
 <?php
-include_once "Resumible.php"; // Incluir la interfaz Resumible
+namespace app\ProyectoVideoclub;
+
 
 abstract class Soporte implements Resumible {
     public $titulo;

@@ -1,9 +1,5 @@
 <?php
-include_once "Cliente.php";
-include_once "Juego.php";
-include_once "CintaVideo.php"; // Asegúrate de incluir la clase Cliente
-include_once "Dvd.php"; // Asegúrate de incluir la clase Cliente
-// Asegúrate de incluir la clase Cliente
+namespace app\ProyectoVideoclub;
 
 class Videoclub
 {

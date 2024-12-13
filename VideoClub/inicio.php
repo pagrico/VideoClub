@@ -1,6 +1,7 @@
 <?php
     
-    include_once "app/ProyectoVideoclub/Videoclub.php"; 
+    require_once("vendor/autoload.php");
+    use app\ProyectoVideoclub\Videoclub;
     
     $vc = new Videoclub("Severo 8A"); 
     

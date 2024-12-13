@@ -1,6 +1,6 @@
 <?php
-include_once "app/ProyectoVideoclub/Videoclub.php";
-include_once "app/ProyectoVideoclub/Cliente.php";
+require_once("vendor/autoload.php");
+use app\ProyectoVideoclub\Videoclub;
 session_start();
 
 $vc = $_SESSION["video"];

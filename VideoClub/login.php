@@ -2,9 +2,8 @@
 
 ob_start(); // Inicia el almacenamiento en búfer de salida
 session_start(); // Inicia o reanuda la sesión
-include_once "app/ProyectoVideoclub/Videoclub.php";
-include_once "app/ProyectoVideoclub/Cliente.php";
-
+require_once("vendor/autoload.php");
+use app\ProyectoVideoclub\Videoclub;
 
 
 // Simulación de usuarios y contraseñas (puedes reemplazar esto con una base de datos en el futuro)
