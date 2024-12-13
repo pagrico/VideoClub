@@ -1,7 +1,7 @@
 <?php
 namespace app\ProyectoVideoclub;
-
-
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
 
 class Cliente
 {
@@ -13,12 +13,17 @@ class Cliente
     private $user;
     private $password;
 
+    private $logger;
+
     // Constructor para inicializar el cliente con nombre, número y máximo alquiler concurrente
     public function __construct($nombre, $numero, $maxAlquilerConcurrente = 3)
     {
         $this->nombre = $nombre;
         $this->numero = $numero;
         $this->maxAlquilerConcurrente = $maxAlquilerConcurrente;
+        $this->logger = new Logger("Cliente_log");
+        $rotate = new RotatingFileHandler("../../log/logsClientes.log", 7, Logger::WARNING);
+        $this->logger->pushHandler($rotate);
     }
     public function setuser($user)
     {
