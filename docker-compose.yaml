@@ -23,7 +23,7 @@ services:
 # Ver los logs con
 # docker-compose logs -f
 
-# Bash: docker-compose exec apache_php_composer bash
+# Bash: docker exec -it apache_php_composer bash
 
 # https://www.bornfight.com/blog/blog-lamp-docker-setup-with-php-8-and-mariadb-for-symfony-projects/
 
