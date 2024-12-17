@@ -1,5 +1,7 @@
 <?php
 namespace app\ProyectoVideoclub;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class Videoclub
 {
@@ -11,15 +13,26 @@ class Videoclub
     private $numProductosAlquilados;
     private $numTotalAlquileres;
 
+    private $logger; // Logger de Monolog
+
     // Constructor
     public function __construct($nombre)
     {
         $this->nombre = $nombre;
+
+        // Inicializar el logger
+        $this->logger = new Logger('VideoclubLogger');
+        $logPath = __DIR__ . '/logs/videoclub.log';
+        $this->logger->pushHandler(new StreamHandler($logPath, Logger::DEBUG));
+
+        $this->logger->info("Videoclub '$nombre' creado.");
     }
+
     // Método privado para incluir un producto
     private function incluirProducto(Soporte $producto): self
     {
         $this->productos[] = $producto;
+        $this->logger->info("Producto incluido:", ['producto' => $producto]);
         return $this; // Retorna $this para encadenamiento
     }
 
@@ -47,12 +60,12 @@ class Videoclub
         print_r($this->clientes);
     }
 
-
     // Método para incluir un cliente
     public function incluirSocio($nombre, $maxAlquileresConcurrentes = 3)
     {
         $cliente = new Cliente($nombre, ++$this->numClientes, $maxAlquileresConcurrentes);
         $this->clientes[] = $cliente;
+        $this->logger->info("Socio incluido:", ['cliente' => $cliente]);
         return $this; // Retorna $this para encadenamiento
     }
 
@@ -64,9 +77,9 @@ class Videoclub
             $estado = $producto->getAlquilado() ? 'Alquilado' : 'Disponible';
             echo "[$index] {$producto->getTitulo()} - $estado<br>";
         }
+        $this->logger->info("Listado de productos generado.");
         return $this; // Retorna $this para encadenamiento
     }
-
 
     // Método para listar clientes
     public function listarSocios()
@@ -75,6 +88,7 @@ class Videoclub
         foreach ($this->clientes as $cliente) {
             echo $cliente . "<br>"; // Usando el método __toString de Cliente
         }
+        $this->logger->info("Listado de clientes generado.");
         return $this; // Retorna $this para encadenamiento
     }
 
@@ -82,6 +96,7 @@ class Videoclub
     public function alquilaSocioProducto(int $numSocio, ...$numerosProductos): void
     {
         if (!isset($this->clientes[$numSocio - 1])) {
+            $this->logger->error("Error: El cliente con índice $numSocio no existe.");
             echo "Error: El cliente con índice $numSocio no existe.<br>";
             return;
         }
@@ -90,6 +105,7 @@ class Videoclub
 
         foreach ($numerosProductos as $numeroProducto) {
             if (!isset($this->productos[$numeroProducto])) {
+                $this->logger->error("Error: El producto con índice $numeroProducto no existe.");
                 echo "Error: El producto con índice $numeroProducto no existe.<br>";
                 continue; // Cambiar 'return' por 'continue'
             }
@@ -97,93 +113,91 @@ class Videoclub
             $producto = $this->productos[$numeroProducto];
 
             if ($producto->getAlquilado()) {
+                $this->logger->warning("El producto ya está alquilado:", ['producto' => $producto]);
                 echo "Error: El producto " . $producto->getTitulo() . " ya está alquilado.<br>";
                 continue; // Cambiar 'return' por 'continue'
             }
 
             $cliente->alquilar($producto);
-
+            $this->logger->info("Producto alquilado:", ['cliente' => $cliente, 'producto' => $producto]);
         }
     }
 
-
-
     public function devolverSocioProducto(int $numSocio, int $numeroProducto): self
     {
-        // Verificar si el cliente existe
         if (!isset($this->clientes[$numSocio])) {
+            $this->logger->error("Error: El cliente con índice $numSocio no existe.");
             echo "Error: El cliente con índice $numSocio no existe.<br>";
             return $this;
         }
 
-        // Verificar si el producto existe
         if (!isset($this->productos[$numeroProducto])) {
+            $this->logger->error("Error: El producto con índice $numeroProducto no existe.");
             echo "Error: El producto con índice $numeroProducto no existe.<br>";
             return $this;
         }
 
-        $cliente = &$this->clientes[$numSocio]; // Referencia al cliente
-        $producto = &$this->productos[$numeroProducto]; // Referencia al producto
+        $cliente = &$this->clientes[$numSocio];
+        $producto = &$this->productos[$numeroProducto];
 
-        // Verificar si el producto está alquilado por este cliente
         if (!$producto['alquilado']) {
+            $this->logger->warning("Intento de devolver un producto no alquilado:", ['producto' => $producto]);
             echo "Error: El producto '{$producto['titulo']}' no está alquilado.<br>";
             return $this;
         }
 
-        // Devolver el producto
-        $producto['alquilado'] = false; // Marcar el producto como disponible
-        $cliente->devolver($numeroProducto); // Actualizar los alquileres del cliente
+        $producto['alquilado'] = false;
+        $cliente->devolver($numeroProducto);
 
+        $this->logger->info("Producto devuelto:", ['cliente' => $cliente, 'producto' => $producto]);
         echo "El cliente '{$cliente->nombre}' devolvió el producto '{$producto['titulo']}'.<br>";
-        return $this; // Soporte para encadenamiento
+        return $this;
     }
-
 
     public function devolverSocioProductos(int $numSocio, ...$numerosProductos): self
     {
-        // Verificar si el cliente existe
         if (!isset($this->clientes[$numSocio])) {
+            $this->logger->error("Error: El cliente con índice $numSocio no existe.");
             echo "Error: El cliente con índice $numSocio no existe.<br>";
             return $this;
         }
 
-        $cliente = &$this->clientes[$numSocio]; // Referencia al cliente
+        $cliente = &$this->clientes[$numSocio];
 
-        // Procesar cada producto
         foreach ($numerosProductos as $numeroProducto) {
-            // Verificar si el producto existe
             if (!isset($this->productos[$numeroProducto])) {
+                $this->logger->error("Error: El producto con índice $numeroProducto no existe.");
                 echo "Error: El producto con índice $numeroProducto no existe.<br>";
-                continue; // Saltar este producto y continuar con el siguiente
+                continue;
             }
 
-            $producto = &$this->productos[$numeroProducto]; // Referencia al producto
+            $producto = &$this->productos[$numeroProducto];
 
-            // Verificar si el producto está alquilado por este cliente
             if (!$producto['alquilado']) {
+                $this->logger->warning("Intento de devolver un producto no alquilado:", ['producto' => $producto]);
                 echo "Error: El producto '{$producto['titulo']}' no está alquilado.<br>";
-                continue; // Saltar este producto y continuar con el siguiente
+                continue;
             }
 
-            // Devolver el producto
-            $producto['alquilado'] = false; // Marcar el producto como disponible
-            $cliente->devolver($numeroProducto); // Actualizar los alquileres del cliente
+            $producto['alquilado'] = false;
+            $cliente->devolver($numeroProducto);
 
+            $this->logger->info("Producto devuelto:", ['cliente' => $cliente, 'producto' => $producto]);
             echo "El cliente '{$cliente->nombre}' devolvió el producto '{$producto['titulo']}'.<br>";
         }
 
-        return $this; // Soporte para encadenamiento
+        return $this;
     }
+
     public function getClientes()
     {
         return $this->clientes;
     }
 
-
     public function userPassword(int $numSocio, $user, $password): void
     {
         if (!isset($this->clientes[$numSocio - 1])) {
+            $this->logger->error("Error: El cliente con índice $numSocio no existe.");
             echo "Error: El cliente con índice $numSocio no existe.<br>";
             return;
         }
@@ -192,33 +206,21 @@ class Videoclub
 
         $cliente->setuser($user);
         $cliente->setpassword($password);
+        $this->logger->info("Usuario y contraseña configurados:", ['cliente' => $cliente]);
     }
+
     public function eliminarCliente(int $id): void
     {
-        // Recorremos el array de clientes para buscar el cliente por ID
         foreach ($this->clientes as $key => $cliente) {
             if ($cliente->getNumero() === $id) {
-                // Si encontramos el cliente, lo eliminamos del array
                 unset($this->clientes[$key]);
-
-                // Reindexamos el array para evitar huecos en las claves numéricas
                 $this->clientes = array_values($this->clientes);
-
-                return; // Salimos del método una vez eliminado
+                $this->logger->info("Cliente eliminado:", ['cliente' => $id]);
+                return;
             }
         }
 
-        // Si llegamos aquí, significa que no se encontró el cliente con ese ID
+        $this->logger->error("Error: Cliente con ID $id no encontrado.");
         throw new Exception("Cliente con ID $id no encontrado.");
     }
-
-
-
-
-
-
-
-
-
 }
-?>
